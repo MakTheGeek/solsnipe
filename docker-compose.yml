@@ -1,0 +1,47 @@
+services:
+  solsnipe-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: solsnipe-bot
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - APP_URL=${APP_URL:-http://localhost:3000}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+      - SESSION_SECRET=${SESSION_SECRET:-solsnipe-prod-session-secret-random-32-chars}
+      - AUTO_LOCK_MINUTES=${AUTO_LOCK_MINUTES:-30}
+      - SOLANA_RPC_URL=${SOLANA_RPC_URL:-https://api.mainnet-beta.solana.com}
+      - SOLANA_RPC_BACKUP_URL=${SOLANA_RPC_BACKUP_URL:-}
+      - SOLANA_PRIVATE_KEY=${SOLANA_PRIVATE_KEY:-}
+      - LIVE_TRADING_ENABLED=${LIVE_TRADING_ENABLED:-false}
+      - MAX_POSITION_SIZE_SOL=${MAX_POSITION_SIZE_SOL:-0.5}
+      - MAX_DAILY_LOSS_SOL=${MAX_DAILY_LOSS_SOL:-2.0}
+      - MAX_OPEN_POSITIONS=${MAX_OPEN_POSITIONS:-5}
+      - MAX_TOTAL_EXPOSURE_SOL=${MAX_TOTAL_EXPOSURE_SOL:-2.0}
+      - MAX_TRADES_PER_HOUR=${MAX_TRADES_PER_HOUR:-20}
+      - MAX_SLIPPAGE_BPS=${MAX_SLIPPAGE_BPS:-1500}
+      - TELEGRAM_API_ID=${TELEGRAM_API_ID:-}
+      - TELEGRAM_API_HASH=${TELEGRAM_API_HASH:-}
+      - TELEGRAM_PHONE=${TELEGRAM_PHONE:-}
+      - TELEGRAM_SESSION_STRING=${TELEGRAM_SESSION_STRING:-}
+      - TELEGRAM_CHANNELS=${TELEGRAM_CHANNELS:-pumpdotfunalert,solana_tracker,dexscreener}
+      - GMGN_API_KEY=${GMGN_API_KEY:-}
+      - JITO_BLOCK_ENGINE_URL=${JITO_BLOCK_ENGINE_URL:-https://mainnet.block-engine.jito.wtf}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - RUNTIME_DIR=/app/runtime/state
+    volumes:
+      - bot-runtime-data:/app/runtime/state
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1));"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  bot-runtime-data:
+    name: solsnipe_bot_runtime_data

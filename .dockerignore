@@ -1,0 +1,16 @@
+node_modules
+dist
+build
+coverage
+runtime
+server/data/*
+!server/data/.gitkeep
+.git
+.env
+.env.*
+!.env.example
+*.session*
+cookies.txt
+*.key
+*.secret
+*.log

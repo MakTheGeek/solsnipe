@@ -1,0 +1,8 @@
+{
+  "name": "SolSnipe",
+  "description": "Production-ready Solana token sniper trading bot with multi-channel Telegram monitoring, on-chain security analysis, Jupiter swap execution, and real-time risk controls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
